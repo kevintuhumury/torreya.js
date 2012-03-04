@@ -2,38 +2,41 @@
 
 Torreya.js is a jQuery Modal plugin written in CoffeeScript. It's basically extracted from the Wordpress plugin called NewMediaFreakr. NewMediaFreakr is a Flickr gallery used on [New Media Freak](http://www.newmediafreak.nl) and can be viewed [here](http://www.newmediafreak.nl/fotografie). The Wordpress plugin will also be released once it's usable (it needs some cleaning up) for the public.
 
-## What's up with the name?
+### What's up with the name?
 
 Torreya is a genus of conifers comprising several species. Torreya.js has a wood background pattern in the modal created by default, so I needed something related to wood and that's basically it.
 
 
-# Usage
+## Usage
 
 You can either call the Torreya.js modal window on a jQuery object or send a jQuery object as a first argument. Both options are shown below with and without overwriting a default options:
 
 ``` coffee-script
-    $(".content").torreya()
-    $.torreya $(".content")
+$(".content").torreya()
+$(".content").torreya useClose: false
+```
 
-    # overwriting a default options (stop using the close button on the modal window)
-    $(".content").torreya useClose: false
-    $.torreya $(".content"), useClose: false
+Sending a jQuery object as the first argument:
+
+``` coffee-script
+$.torreya $(".content")
+$.torreya $(".content"), useClose: false
 ```
 
 That's it.
 
 
-# Getting started
+## Getting started
 
 Need more help? Follow these easy steps.
 
-## 1. Include jQuery
+### 1. Include jQuery
 
 ``` html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 ```
 
-## 2. Include Torreya.js
+### 2. Include Torreya.js
 
 ``` html
 <script src="jquery.torreya.js"></script>
@@ -45,12 +48,12 @@ Don't forget to include the default Torreya.js styles (as seen below) and make s
 <link rel="stylesheet" type="text/css" href="css/torreya.css" />
 ```
 
-## 3. Actually use the Torreya.js plugin
+### 3. Actually use the Torreya.js plugin
 
 The final step is to actually start using the plugin. Take a look at the `Usage` section or at the next section for an example.
 
 
-# Example
+## Example
 
 The following is an example HTML page with the jQuery library loaded from the Google Libraries API. The Torreya.js jQuery Modal plugin, an `example.js` file and the Torreya.js stylesheet are also loaded. The contents of `example.js` are shown below the HTML page.
 
@@ -72,13 +75,13 @@ The following is an example HTML page with the jQuery library loaded from the Go
             <li><a href="http://www.newmediafreak.nl" class="external">External</a></li>
         </ol>
         <div style="display: none;">
-            <div id="info">Nulla vitae elit libero, a pharetra augue. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</div>
+            <div id="info">Nulla vitae elit libero, a pharetra augue.</div>
         </div>
     </body>
 </html>
 ```
 
-## The `example.js` file
+### The `example.js` file
 
 There are three links in the HTML example page. Each of those links opens the Torreya.js modal window in a different way. To open all the URL's (in this case it's just the first one) with the class `torreya` in a modal window, you can do the following:
 
@@ -106,7 +109,7 @@ $('#external').live "click", (event) =>
 ```
 
 
-# Development
+## Development
 
 Want to extend the Torreya.js jQuery Modal plugin? That's easy. Make your changes in the `src` directory and compile the *.coffee files to a single JavaScript file called `jquery.torreya.js` with the following command:
 
@@ -115,6 +118,6 @@ Want to extend the Torreya.js jQuery Modal plugin? That's easy. Make your change
 I used the `coffee` command here, which among other things can compile `.coffee` files into `.js`. You'll need Node.js and NPM (Node Package Manager) for this though. More information about how to install this can be found on the official [CoffeeScript](http://coffeescript.org/#installation) website.
 
 
-# License
+## License
 
 Copyright 2012 Kevin Tuhumury. Released under the MIT License.
