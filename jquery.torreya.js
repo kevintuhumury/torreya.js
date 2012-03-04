@@ -75,7 +75,7 @@
       return this.addBehavior();
     };
     Torreya.prototype.loadContent = function(content) {
-      return new Torreya.Content(this, content, this.options).load();
+      return new Torreya.ContentLoader(this, content, this.options).load();
     };
     Torreya.prototype.addBehavior = function() {
       this.closeElement.live("click", this.handleClose);
@@ -169,117 +169,127 @@
     return Torreya;
   })();
   this.Torreya || (this.Torreya = Torreya);
-  Torreya.Content = (function() {
-    function Content(parent, content, options) {
-      this.parent = parent;
+  Torreya.ContentAppender = (function() {
+    function ContentAppender(torreya, options) {
+      this.torreya = torreya;
+      this.options = options;
+      this.replace = false;
+    }
+    ContentAppender.prototype.append = function(content) {
+      if (this.torreya.content) {
+        if (this.isContentElement(content)) {
+          this.replace = true;
+        } else {
+          this.torreya.dataElement.hide().remove();
+        }
+      }
+      this.appendToContainer(content);
+      this.reposition();
+      if (this.replace) {
+        this.replace();
+      } else {
+        this.appendToWrapper();
+      }
+      return this.show();
+    };
+    ContentAppender.prototype.isContentElement = function(content) {
+      return this.torreya.content.attr("id") === content.attr("id");
+    };
+    ContentAppender.prototype.appendToContainer = function(content) {
+      return this.torreya.content = content.addClass("torreya-data").css({
+        overflow: "hidden"
+      }).appendTo(this.options.mainContainer);
+    };
+    ContentAppender.prototype.appendToWrapper = function() {
+      return this.torreya.content.appendTo(this.torreya.wrapper);
+    };
+    ContentAppender.prototype.replace = function() {
+      return $("#" + this.options.wrapperId).find("#" + this.torreya.content.attr("id")).replaceWith(this.torreya.content);
+    };
+    ContentAppender.prototype.reposition = function() {
+      this.torreya.modal.css({
+        width: this.torreya.content.outerWidth(),
+        height: this.torreya.content.outerHeight()
+      });
+      return this.torreya.position();
+    };
+    ContentAppender.prototype.show = function() {
+      this.torreya.loader.hide();
+      return this.torreya.show();
+    };
+    return ContentAppender;
+  })();
+  Torreya.ContentLoader = (function() {
+    function ContentLoader(torreya, content, options) {
+      this.torreya = torreya;
       this.content = content;
       this.options = options;
+      this.appender = new Torreya.ContentAppender(this.torreya, this.options);
     }
-    Content.prototype.load = function() {
+    ContentLoader.prototype.load = function() {
       if (this.isObject()) {
-        return this.appendContentWithPlaceholder();
+        return this.appendWithPlaceholder();
       } else {
         return this.appendExternalOrWrappedContent();
       }
     };
-    Content.prototype.isObject = function() {
+    ContentLoader.prototype.isObject = function() {
       return typeof this.content === "object";
     };
-    Content.prototype.appendContentWithPlaceholder = function() {
+    ContentLoader.prototype.appendWithPlaceholder = function() {
       return this.append(this.content.before(this.placeholder()));
     };
-    Content.prototype.placeholder = function() {
+    ContentLoader.prototype.placeholder = function() {
       return $("<span/>").attr("id", this.options.placeholderId).css({
         display: "none"
       });
     };
-    Content.prototype.appendExternalOrWrappedContent = function() {
+    ContentLoader.prototype.appendExternalOrWrappedContent = function() {
       if (this.isUrl()) {
         return this.external();
       } else {
         return this.append(this.wrappedContent());
       }
     };
-    Content.prototype.isUrl = function() {
+    ContentLoader.prototype.isUrl = function() {
       return this.pattern().test(this.content);
     };
-    Content.prototype.pattern = function() {
+    ContentLoader.prototype.pattern = function() {
       return /(http):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     };
-    Content.prototype.external = function() {
+    ContentLoader.prototype.external = function() {
       if (this.isExternal()) {
         this.append(this.externalContent());
-        return this.parent.options.dataExternal = false;
+        return this.torreya.options.dataExternal = false;
       } else {
         return this.retrieveContent(this);
       }
     };
-    Content.prototype.isExternal = function() {
+    ContentLoader.prototype.isExternal = function() {
       return this.options.dataExternal;
     };
-    Content.prototype.externalContent = function() {
+    ContentLoader.prototype.externalContent = function() {
       return $("<iframe/>").attr("src", this.content).css(this.styles());
     };
-    Content.prototype.retrieveContent = function(object) {
+    ContentLoader.prototype.retrieveContent = function(object) {
       return $.get(object.content, function(response) {
         return object.append($(response));
       });
     };
-    Content.prototype.styles = function() {
+    ContentLoader.prototype.styles = function() {
       return {
         height: this.options.iframeHeight,
         width: this.options.iframeWidth,
         border: "none"
       };
     };
-    Content.prototype.wrappedContent = function() {
+    ContentLoader.prototype.wrappedContent = function() {
       return $("<div/>").html(this.content);
     };
-    Content.prototype.append = function(content) {
-      var replaceContent;
-      replaceContent = false;
-      if (this.parent.content) {
-        if (this.isContentElement(content)) {
-          replaceContent = true;
-        } else {
-          this.parent.dataElement.hide().remove();
-        }
-      }
-      this.appendContentToContainer(content);
-      this.repositionModal();
-      if (replaceContent) {
-        this.replaceContent();
-      } else {
-        this.appendContentToWrapper();
-      }
-      return this.showModal();
+    ContentLoader.prototype.append = function(content) {
+      return this.appender.append(content);
     };
-    Content.prototype.isContentElement = function(content) {
-      return this.parent.content.attr("id") === content.attr("id");
-    };
-    Content.prototype.appendContentToContainer = function(content) {
-      return this.parent.content = content.addClass("torreya-data").css({
-        overflow: "hidden"
-      }).appendTo(this.options.mainContainer);
-    };
-    Content.prototype.appendContentToWrapper = function() {
-      return this.parent.content.appendTo(this.parent.wrapper);
-    };
-    Content.prototype.replaceContent = function() {
-      return $("#" + this.options.wrapperId).find("#" + this.parent.content.attr("id")).replaceWith(this.parent.content);
-    };
-    Content.prototype.repositionModal = function() {
-      this.parent.modal.css({
-        width: this.parent.content.outerWidth(),
-        height: this.parent.content.outerHeight()
-      });
-      return this.parent.position();
-    };
-    Content.prototype.showModal = function() {
-      this.parent.loader.hide();
-      return this.parent.show();
-    };
-    return Content;
+    return ContentLoader;
   })();
   Torreya.Loader = (function() {
     function Loader(options) {

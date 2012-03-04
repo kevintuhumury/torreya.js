@@ -72,7 +72,7 @@ class Torreya
     @addBehavior()
 
   loadContent: (content) ->
-    new Torreya.Content(@, content, @options).load()
+    new Torreya.ContentLoader(@, content, @options).load()
 
   addBehavior: ->
     @closeElement.live "click", @handleClose
