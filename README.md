@@ -1,15 +1,15 @@
 # Torreya.js
 
-Torreya.js is a jQuery Modal plugin written in CoffeeScript. It's basically extracted from the Wordpress plugin called NewMediaFreakr. NewMediaFreakr is a Flickr gallery used on [New Media Freak](http://www.newmediafreak.nl) and can be viewed [here](http://www.newmediafreak.nl/fotografie). The Wordpress plugin will also be released once it's usable (it needs some cleaning up) for the public.
+Torreya.js is a jQuery Modal plugin written in CoffeeScript. It's basically extracted from the Wordpress plugin called NewMediaFreakr. NewMediaFreakr is a Flickr gallery used on [New Media Freak](http://www.newmediafreak.nl) and can be viewed [here](http://www.newmediafreak.nl/fotografie). The Wordpress plugin will also be released once it's usable for the public (it needs some cleaning up).
 
 ### What's up with the name?
 
-Torreya is a genus of conifers comprising several species. Torreya.js has a wood background pattern in the modal created by default, so I needed something related to wood and that's basically it.
+Torreya is a genus of conifers comprising several species. Torreya.js has wood as a background pattern in the modal created by default, so I needed something related to wood and that's basically it.
 
 
 ## Usage
 
-You can either call the Torreya.js modal window on a jQuery object or send a jQuery object as a first argument. Both options are shown below with and without overwriting a default options:
+You can either call the Torreya.js modal window on a jQuery object or send a jQuery object as a first argument. Both options are shown below with and without overwriting a default option:
 
 ``` coffee-script
 $(".content").torreya()
@@ -100,7 +100,7 @@ $('a[class="info"]').live "click", (event) =>
   $("#info").torreya position: [100, 200]
 ```
 
-The above CoffeeScript also places the content from the "#info" div in a modal window on position `100, 200` from the top left of the browser. The external website New Media Freak can be opened with the below code. This opens the website in an iframe which is added to the modal window.
+The above CoffeeScript also places the content from the "#info" div in a modal window on position `100, 200` from the top left of the browser. The external website New Media Freak can be opened with the code below. This opens the website in an iframe which is added to the modal window.
 
 ``` coffee-script
 $('#external').live "click", (event) =>
