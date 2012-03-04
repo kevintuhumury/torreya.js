@@ -33,13 +33,13 @@ Need more help? Follow these easy steps.
 ### 1. Include jQuery
 
 ``` html
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 ```
 
 ### 2. Include Torreya.js
 
 ``` html
-<script src="jquery.torreya.js"></script>
+<script type="text/javascript" src="jquery.torreya.js"></script>
 ```
 
 Don't forget to include the default Torreya.js styles (as seen below) and make sure you'll place the images on your server.
@@ -97,7 +97,7 @@ hidden. To place the content from the "#info" div in a modal window one could do
 ``` coffee-script
 $('a[class="info"]').live "click", (event) =>
   event.preventDefault()
-  $("#info").torreya {position: [100, 200]}
+  $("#info").torreya position: [100, 200]
 ```
 
 The above CoffeeScript also places the content from the "#info" div in a modal window on position `100, 200` from the top left of the browser. The external website New Media Freak can be opened with the below code. This opens the website in an iframe which is added to the modal window.
@@ -105,7 +105,7 @@ The above CoffeeScript also places the content from the "#info" div in a modal w
 ``` coffee-script
 $('#external').live "click", (event) =>
   event.preventDefault()
-  $.torreya $(event.currentTarget).attr("href"), { dataExternal: true }
+  $.torreya $(event.currentTarget).attr("href"), dataExternal: true
 ```
 
 
